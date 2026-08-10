@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fashion Store</title>
+
+    <style>
+        /* =========================
+           RESET
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f8f8f8;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            width: 100%;
+            background: #111;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 25px;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: #fff;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #d4af37;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .header-actions a {
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .header-actions a:hover {
+            color: #d4af37;
+        }
+
+        .cart-link {
+            position: relative;
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -10px;
+            right: -12px;
+            background: #d4af37;
+            color: #111;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .menu-button {
+            display: none;
+            border: none;
+            background: none;
+            color: white;
+            font-size: 26px;
+            cursor: pointer;
+        }
+
+        /* =========================
+           BANNER
+        ========================= */
+
+        .hero {
+            min-height: 550px;
+            display: flex;
+            align-items: center;
+            padding: 60px 8%;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(0, 0, 0, 0.75),
+                    rgba(0, 0, 0, 0.25)
+                ),
+                url("https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-content span {
+            color: #d4af37;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 14px;
+        }
+
+        .hero h2 {
+            font-size: 55px;
+            line-height: 1.1;
+            margin: 15px 0;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #eee;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 28px;
+            background: #d4af37;
+            color: #111;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #fff;
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           SEÇÕES
+        ========================= */
+
+        section {
+            padding: 70px 6%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .section-title p {
+            color: #777;
+        }
+
+        /* =========================
+           CATEGORIAS
+        ========================= */
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .category {
+            min-height: 220px;
+            background: #222;
+            color: white;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                transparent,
+                rgba(0, 0, 0, 0.8)
+            );
+        }
+
+        .category-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .category h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .category p {
+            color: #ddd;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .category a {
+            color: #d4af37;
+            font-weight: bold;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+        }
+
+        .category {
+            transition: 0.3s;
+        }
+
+        /* =========================
+           PRODUTOS
+        ========================= */
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .product {
+            background: white;
+            border: 1px solid #eee;
+            overflow: hidden;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .product:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+            transition: 0.5s;
+        }
+
+        .product:hover img {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-info h3 {
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #111;
+            margin-bottom: 15px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .product-actions a,
+        .product-actions button {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .product-actions a {
+            border: 1px solid #111;
+        }
+
+        .product-actions button {
+            background: #111;
+            color: white;
+        }
+
+        .product-actions button:hover {
+            background: #d4af37;
+            color: #111;
+        }
+
+        .favorite {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 38px;
+            height: 38px;
+            border: none;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 5;
+        }
+
+        .favorite.active {
+            color: #e63946;
+        }
+
+        /* =========================
+           PROMOÇÃO
+        ========================= */
+
+        .promotion {
+            background:
+                linear-gradient(
+                    rgba(0, 0, 0, 0.7),
+                    rgba(0, 0, 0, 0.7)
+                ),
+                url("https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            color: white;
+        }
+
+        .promotion h2 {
+            font-size: 45px;
+            color: #d4af37;
+        }
+
+        .promotion p {
+            margin: 10px 0 25px;
+            font-size: 18px;
+        }
+
+        /* =========================
+           BENEFÍCIOS
+        ========================= */
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .benefit {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+
+        .benefit-icon {
+            font-size: 35px;
+            margin-bottom: 15px;
+        }
+
+        .benefit h3 {
+            margin-bottom: 8px;
+        }
+
+        .benefit p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: #111;
+            color: white;
+            padding: 60px 6% 25px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        footer h2,
+        footer h3 {
+            margin-bottom: 15px;
+        }
+
+        footer p {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        footer ul {
+            list-style: none;
+        }
+
+        footer li {
+            margin-bottom: 8px;
+        }
+
+        footer li a,
+        footer .social a {
+            color: #aaa;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        footer li a:hover,
+        footer .social a:hover {
+            color: #d4af37;
+        }
+
+        .social {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .copyright {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            text-align: center;
+        }
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: #111;
+            color: white;
+            padding: 15px 22px;
+            border-left: 4px solid #d4af37;
+            transform: translateX(150%);
+            transition: 0.4s;
+            z-index: 9999;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* =========================
+           RESPONSIVIDADE
+        ========================= */
+
+        @media (max-width: 1100px) {
+
+            nav ul {
+                gap: 15px;
+            }
+
+            .products,
+            .categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .benefits {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 800px) {
+
+            header {
+                flex-wrap: wrap;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            nav {
+                display: none;
+                width: 100%;
+            }
+
+            nav.active {
+                display: block;
+            }
+
+            nav ul {
+                flex-direction: column;
+                padding-top: 20px;
+                gap: 15px;
+            }
+
+            .header-actions {
+                margin-left: auto;
+            }
+
+            .hero {
+                min-height: 500px;
+            }
+
+            .hero h2 {
+                font-size: 40px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            section {
+                padding: 50px 5%;
+            }
+
+            .hero {
+                padding: 50px 7%;
+            }
+
+            .hero h2 {
+                font-size: 34px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .products,
+            .categories,
+            .benefits,
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product img {
+                height: 400px;
+            }
+
+            .header-actions a:not(.cart-link) {
+                display: none;
+            }
+
+            .promotion h2 {
+                font-size: 35px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         CABEÇALHO
+    ========================== -->
+
+    <header>
+
+        <h1><a href="{% url 'home' %}">Fashion Store</a></h1>
+
+        <button
+            class="menu-button"
+            id="menu-button"
+            aria-label="Abrir menu"
+        >
+            ☰
+        </button>
+
+        <nav id="navigation">
+            <ul>
+                <li><a href="{% url 'home' %}">Início</a></li>
+                <li><a href="#masculino">Masculino</a></li>
+                <li><a href="#feminino">Feminino</a></li>
+                <li><a href="#calcados">Calçados</a></li>
+                <li><a href="#acessorios">Acessórios</a></li>
+                <li><a href="#promocoes">Promoções</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-actions">
+
+            <a href="#" id="search-button">
+                🔍 Buscar
+            </a>
+
+            <a href="#">
+                👤 Minha conta
+            </a>
+
+            <a href="{% url 'carrinho' %}" class="cart-link">
+                🛒 Carrinho
+
+                <span id="cart-count">0</span>
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <!-- =========================
+             BANNER
+        ========================== -->
+
+        <section class="hero" id="inicio">
+
+            <div class="hero-content">
+
+                <span>Nova coleção 2026</span>
+
+                <h2>
+                    Vista seu estilo.
+                    Viva sua moda.
+                </h2>
+
+                <p>
+                    Descubra peças exclusivas, conforto e
+                    personalidade para todos os momentos.
+                </p>
+
+                <a href="#produtos" class="btn">
+                    Comprar agora
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CATEGORIAS
+        ========================== -->
+
+        <section>
+
+            <div class="section-title">
+                <h2>Compre por categoria</h2>
+
+                <p>
+                    Encontre exatamente o que combina com você.
+                </p>
+            </div>
+
+            <div class="categories">
+
+                <article
+                    class="category"
+                    id="feminino"
+                    style="
+                    background:
+                    url('https://images.unsplash.com/photo-1485968579580-b6d095142e6e?auto=format&fit=crop&w=700&q=80')
+                    center/cover;
+                    "
+                >
+                    <div class="category-content">
+
+                        <h3>Feminino</h3>
+
+                        <p>
+                            Confira nossas novidades femininas.
+                        </p>
+
+                        <a href="#">
+                            Ver produtos →
+                        </a>
+
+                    </div>
+                </article>
+
+
+                <article
+                    class="category"
+                    id="masculino"
+                    style="
+                    background:
+                    url('https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?auto=format&fit=crop&w=700&q=80')
+                    center/cover;
+                    "
+                >
+                    <div class="category-content">
+
+                        <h3>Masculino</h3>
+
+                        <p>
+                            Encontre seu próximo look.
+                        </p>
+
+                        <a href="#">
+                            Ver produtos →
+                        </a>
+
+                    </div>
+                </article>
+
+
+                <article
+                    class="category"
+                    id="calcados"
+                    style="
+                    background:
+                    url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80')
+                    center/cover;
+                    "
+                >
+                    <div class="category-content">
+
+                        <h3>Calçados</h3>
+
+                        <p>
+                            Tênis, botas, sandálias e muito mais.
+                        </p>
+
+                        <a href="#">
+                            Ver produtos →
+                        </a>
+
+                    </div>
+                </article>
+
+
+                <article
+                    class="category"
+                    id="acessorios"
+                    style="
+                    background:
+                    url('https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=700&q=80')
+                    center/cover;
+                    "
+                >
+                    <div class="category-content">
+
+                        <h3>Acessórios</h3>
+
+                        <p>
+                            Complete seu estilo.
+                        </p>
+
+                        <a href="#">
+                            Ver produtos →
+                        </a>
+
+                    </div>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             PRODUTOS
+        ========================== -->
+
+        <section id="produtos">
+
+            <div class="section-title">
+
+                <h2>Produtos em destaque</h2>
+
+                <p>
+                    Os favoritos dos nossos clientes.
+                </p>
+
+            </div>
+
+
+            <div class="products">
+
+                <!-- Produto 1 -->
+
+                <article class="product">
+
+                    <div class="product-image">
+
+                        <button
+                            class="favorite"
+                            type="button"
+                            aria-label="Favoritar produto"
+                        >
+                            ♡
+                        </button>
+
+                        <img
+                            src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80"
+                            alt="Camiseta básica preta"
+                        >
+
+                    </div>
+
+                    <div class="product-info">
+
+                        <h3>Camiseta Básica Preta</h3>
+
+                        <p class="product-price">
+                            R$ 59,90
+                        </p>
+
+                        <div class="product-actions">
+
+                            <a href="#">
+                                Ver produto
+                            </a>
+
+                            <button
+                                class="add-cart"
+                                type="button"
+                                data-product="Camiseta Básica Preta"
+                            >
+                                Adicionar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Produto 2 -->
+
+                <article class="product">
+
+                    <div class="product-image">
+
+                        <button
+                            class="favorite"
+                            type="button"
+                            aria-label="Favoritar produto"
+                        >
+                            ♡
+                        </button>
+
+                        <img
+                            src="https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=600&q=80"
+                            alt="Calça jeans masculina"
+                        >
+
+                    </div>
+
+                    <div class="product-info">
+
+                        <h3>Calça Jeans Masculina</h3>
+
+                        <p class="product-price">
+                            R$ 149,90
+                        </p>
+
+                        <div class="product-actions">
+
+                            <a href="#">
+                                Ver produto
+                            </a>
+
+                            <button
+                                class="add-cart"
+                                type="button"
+                                data-product="Calça Jeans Masculina"
+                            >
+                                Adicionar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Produto 3 -->
+
+                <article class="product">
+
+                    <div class="product-image">
+
+                        <button
+                            class="favorite"
+                            type="button"
+                            aria-label="Favoritar produto"
+                        >
+                            ♡
+                        </button>
+
+                        <img
+                            src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=600&q=80"
+                            alt="Vestido feminino"
+                        >
+
+                    </div>
+
+                    <div class="product-info">
+
+                        <h3>Vestido Casual</h3>
+
+                        <p class="product-price">
+                            R$ 129,90
+                        </p>
+
+                        <div class="product-actions">
+
+                            <a href="#">
+                                Ver produto
+                            </a>
+
+                            <button
+                                class="add-cart"
+                                type="button"
+                                data-product="Vestido Casual"
+                            >
+                                Adicionar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- Produto 4 -->
+
+                <article class="product">
+
+                    <div class="product-image">
+
+                        <button
+                            class="favorite"
+                            type="button"
+                            aria-label="Favoritar produto"
+                        >
+                            ♡
+                        </button>
+
+                        <img
+                            src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80"
+                            alt="Tênis branco"
+                        >
+
+                    </div>
+
+                    <div class="product-info">
+
+                        <h3>Tênis Casual</h3>
+
+                        <p class="product-price">
+                            R$ 199,90
+                        </p>
+
+                        <div class="product-actions">
+
+                            <a href="#">
+                                Ver produto
+                            </a>
+
+                            <button
+                                class="add-cart"
+                                type="button"
+                                data-product="Tênis Casual"
+                            >
+                                Adicionar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             PROMOÇÃO
+        ========================== -->
+
+        <section class="promotion" id="promocoes">
+
+            <h2>Até 50% OFF</h2>
+
+            <p>
+                Aproveite nossas ofertas especiais por tempo limitado.
+            </p>
+
+            <a href="#" class="btn">
+                Ver promoções
+            </a>
+
+        </section>
+
+
+        <!-- =========================
+             BENEFÍCIOS
+        ========================== -->
+
+        <section>
+
+            <div class="section-title">
+
+                <h2>Por que comprar conosco?</h2>
+
+                <p>
+                    Tudo para tornar sua experiência melhor.
+                </p>
+
+            </div>
+
+
+            <div class="benefits">
+
+                <article class="benefit">
+
+                    <div class="benefit-icon">
+                        🚚
+                    </div>
+
+                    <h3>Frete rápido</h3>
+
+                    <p>
+                        Enviamos seu pedido com rapidez
+                        e segurança.
+                    </p>
+
+                </article>
+
+
+                <article class="benefit">
+
+                    <div class="benefit-icon">
+                        🔒
+                    </div>
+
+                    <h3>Compra segura</h3>
+
+                    <p>
+                        Seus dados estão protegidos
+                        durante toda a compra.
+                    </p>
+
+                </article>
+
+
+                <article class="benefit">
+
+                    <div class="benefit-icon">
+                        ↩️
+                    </div>
+
+                    <h3>Troca fácil</h3>
+
+                    <p>
+                        Troque seus produtos de forma
+                        simples e rápida.
+                    </p>
+
+                </article>
+
+
+                <article class="benefit">
+
+                    <div class="benefit-icon">
+                        💳
+                    </div>
+
+                    <h3>Pagamento seguro</h3>
+
+                    <p>
+                        Várias opções de pagamento
+                        para você escolher.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <div class="footer-grid">
+
+            <div>
+
+                <h2>Fashion Store</h2>
+
+                <p>
+                    Moda para todos os estilos.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h3>Institucional</h3>
+
+                <ul>
+
+                    <li>
+                        <a href="#">
+                            Sobre nós
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            Contato
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            Política de privacidade
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            Termos de uso
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div>
+
+                <h3>Atendimento</h3>
+
+                <p>
+                    Segunda a sexta: 08h às 18h
+                </p>
+
+                <p>
+                    Email: contato@fashionstore.com
+                </p>
+
+                <p>
+                    Telefone: (11) 99999-9999
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h3>Siga-nos</h3>
+
+                <div class="social">
+
+                    <a href="#">
+                        Instagram
+                    </a>
+
+                    <a href="#">
+                        Facebook
+                    </a>
+
+                    <a href="#">
+                        TikTok
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="copyright">
+
+            <p>
+                &copy; 2026 Fashion Store.
+                Todos os direitos reservados.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- Mensagem de confirmação -->
+
+    <div
+        class="toast"
+        id="toast"
+    >
+        Produto adicionado ao carrinho!
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        // =========================
+        // MENU MOBILE
+        // =========================
+
+        const menuButton =
+            document.getElementById("menu-button");
+
+        const navigation =
+            document.getElementById("navigation");
+
+        menuButton.addEventListener("click", function () {
+
+            navigation.classList.toggle("active");
+
+        });
+
+
+        // =========================
+        // CARRINHO
+        // =========================
+
+        const cartCount =
+            document.getElementById("cart-count");
+
+        const addButtons =
+            document.querySelectorAll(".add-cart");
+
+        let cart = JSON.parse(
+            localStorage.getItem("fashionCart")
+        ) || [];
+
+
+        function updateCartCount() {
+
+            cartCount.textContent = cart.length;
+
+        }
+
+
+        addButtons.forEach(function(button) {
+
+            button.addEventListener("click", function() {
+
+                const productName =
+                    button.dataset.product;
+
+                cart.push(productName);
+
+                localStorage.setItem(
+                    "fashionCart",
+                    JSON.stringify(cart)
+                );
+
+                updateCartCount();
+
+                showToast(
+                    productName +
+                    " foi adicionado ao carrinho!"
+                );
+
+            });
+
+        });
+
+
+        // =========================
+        // FAVORITOS
+        // =========================
+
+        const favoriteButtons =
+            document.querySelectorAll(".favorite");
+
+        favoriteButtons.forEach(function(button) {
+
+            button.addEventListener("click", function() {
+
+                button.classList.toggle("active");
+
+                if (
+                    button.classList.contains("active")
+                ) {
+
+                    button.textContent = "♥";
+
+                } else {
+
+                    button.textContent = "♡";
+
+                }
+
+            });
+
+        });
+
+
+        // =========================
+        // TOAST
+        // =========================
+
+        const toast =
+            document.getElementById("toast");
+
+
+        function showToast(message) {
+
+            toast.textContent = message;
+
+            toast.classList.add("show");
+
+            setTimeout(function() {
+
+                toast.classList.remove("show");
+
+            }, 2500);
+
+        }
+
+
+        // =========================
+        // BUSCA
+        // =========================
+
+        const searchButton =
+            document.getElementById("search-button");
+
+        searchButton.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                const search =
+                    prompt(
+                        "O que você está procurando?"
+                    );
+
+                if (
+                    search &&
+                    search.trim() !== ""
+                ) {
+
+                    showToast(
+                        "Buscando por: " + search
+                    );
+
+                }
+
+            }
+        );
+
+
+        // =========================
+        // INICIALIZAÇÃO
+        // =========================
+
+        updateCartCount();
+
+    </script>
+
+</body>
+</html>

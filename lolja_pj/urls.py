@@ -16,7 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from lolja_app import views as lolja_views
+from carrinho_app import views as carrinho_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('home/', lolja_views.home, name='home'),
+    path('', lolja_views.home, name='home'),
+    path('carrinho/', carrinho_views.carrinho, name='carrinho'),
 ]

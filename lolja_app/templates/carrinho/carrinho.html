@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meu Carrinho - Fashion Store</title>
+
+    <style>
+        /* =========================
+           RESET
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+            line-height: 1.5;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            background: #111;
+            color: white;
+            min-height: 75px;
+            padding: 15px 6%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 25px;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #d4af37;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .header-actions a {
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .header-actions a:hover {
+            color: #d4af37;
+        }
+
+        .menu-button {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 27px;
+            cursor: pointer;
+        }
+
+        .cart-link {
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -12px;
+
+            width: 20px;
+            height: 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #d4af37;
+            color: #111;
+
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        main {
+            max-width: 1250px;
+            margin: auto;
+            padding: 50px 25px 80px;
+        }
+
+        /* =========================
+           TÍTULO
+        ========================= */
+
+        .page-title {
+            margin-bottom: 35px;
+        }
+
+        .page-title h2 {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        .page-title p {
+            color: #777;
+        }
+
+        /* =========================
+           LAYOUT DO CARRINHO
+        ========================= */
+
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 30px;
+            align-items: start;
+        }
+
+        /* =========================
+           PRODUTOS
+        ========================= */
+
+        .cart-products {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e7e7e7;
+        }
+
+        .cart-product {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 25px;
+
+            padding: 25px;
+
+            position: relative;
+        }
+
+        .cart-product img {
+            width: 150px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .product-info h3 {
+            font-size: 19px;
+            margin-bottom: 12px;
+        }
+
+        .product-info p {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .product-price {
+            color: #111 !important;
+            font-size: 17px !important;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* =========================
+           QUANTIDADE
+        ========================= */
+
+        .quantity-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .quantity-area label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .quantity-controls button {
+            width: 35px;
+            height: 35px;
+
+            border: none;
+            background: #f2f2f2;
+
+            cursor: pointer;
+            font-size: 18px;
+
+            transition: 0.2s;
+        }
+
+        .quantity-controls button:hover {
+            background: #d4af37;
+        }
+
+        .quantity-controls input {
+            width: 45px;
+            height: 35px;
+
+            border: none;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+
+            text-align: center;
+            outline: none;
+        }
+
+        /* Remove setinhas do input */
+
+        .quantity-controls input::-webkit-inner-spin-button,
+        .quantity-controls input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .quantity-controls input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        /* =========================
+           TOTAL DO PRODUTO
+        ========================= */
+
+        .product-total {
+            margin-top: 15px;
+            color: #111 !important;
+            font-size: 18px !important;
+            font-weight: bold;
+        }
+
+        /* =========================
+           REMOVER
+        ========================= */
+
+        .remove-button {
+            margin-top: 12px;
+
+            border: none;
+            background: none;
+
+            color: #c62828;
+            cursor: pointer;
+
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .remove-button:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #eee;
+        }
+
+        /* =========================
+           RESUMO
+        ========================= */
+
+        .summary {
+            background: white;
+            border: 1px solid #e7e7e7;
+            border-radius: 8px;
+            padding: 25px;
+
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary h2 {
+            font-size: 22px;
+            margin-bottom: 25px;
+        }
+
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .summary-line strong {
+            color: #111;
+        }
+
+        .summary hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            font-size: 21px;
+            font-weight: bold;
+
+            margin-bottom: 25px;
+        }
+
+        .checkout-button {
+            width: 100%;
+            border: none;
+
+            background: #111;
+            color: white;
+
+            padding: 15px;
+
+            font-weight: bold;
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .checkout-button:hover {
+            background: #d4af37;
+            color: #111;
+        }
+
+        .continue-shopping {
+            display: block;
+            text-align: center;
+
+            margin-top: 18px;
+
+            color: #555;
+            font-size: 14px;
+        }
+
+        .continue-shopping:hover {
+            color: #111;
+            text-decoration: underline;
+        }
+
+        /* =========================
+           CUPOM
+        ========================= */
+
+        .coupon {
+            margin-top: 25px;
+            background: white;
+
+            border: 1px solid #e7e7e7;
+            border-radius: 8px;
+
+            padding: 25px;
+        }
+
+        .coupon h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .coupon-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .coupon-form input {
+            flex: 1;
+
+            border: 1px solid #ccc;
+            padding: 12px;
+
+            outline: none;
+        }
+
+        .coupon-form input:focus {
+            border-color: #111;
+        }
+
+        .coupon-form button {
+            border: none;
+            background: #111;
+            color: white;
+
+            padding: 12px 20px;
+
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .coupon-form button:hover {
+            background: #d4af37;
+            color: #111;
+        }
+
+        .coupon-message {
+            margin-top: 12px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .coupon-message.success {
+            display: block;
+            color: #2e7d32;
+        }
+
+        .coupon-message.error {
+            display: block;
+            color: #c62828;
+        }
+
+        /* =========================
+           CARRINHO VAZIO
+        ========================= */
+
+        .empty-cart {
+            background: white;
+            padding: 70px 30px;
+            text-align: center;
+            border: 1px solid #e7e7e7;
+            border-radius: 8px;
+        }
+
+        .empty-cart-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .empty-cart h2 {
+            margin-bottom: 10px;
+        }
+
+        .empty-cart p {
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .empty-cart a {
+            display: inline-block;
+            background: #111;
+            color: white;
+            padding: 13px 25px;
+            font-weight: bold;
+        }
+
+        .empty-cart a:hover {
+            background: #d4af37;
+            color: #111;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: #111;
+            color: white;
+            padding: 60px 6% 25px;
+        }
+
+        .footer-grid {
+            max-width: 1250px;
+            margin: auto;
+
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        footer h2,
+        footer h3 {
+            margin-bottom: 15px;
+        }
+
+        footer p {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 7px;
+        }
+
+        footer ul {
+            list-style: none;
+        }
+
+        footer li {
+            margin-bottom: 8px;
+        }
+
+        footer a {
+            color: #aaa;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        footer a:hover {
+            color: #d4af37;
+        }
+
+        .social {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .copyright {
+            max-width: 1250px;
+            margin: auto;
+
+            border-top: 1px solid #333;
+            padding-top: 20px;
+
+            text-align: center;
+        }
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+
+            background: #111;
+            color: white;
+
+            padding: 15px 22px;
+
+            border-left: 4px solid #d4af37;
+
+            transform: translateX(150%);
+            transition: 0.4s;
+
+            z-index: 9999;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* =========================
+           RESPONSIVIDADE
+        ========================= */
+
+        @media (max-width: 1050px) {
+
+            nav ul {
+                gap: 15px;
+            }
+
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .summary {
+                position: static;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 800px) {
+
+            header {
+                flex-wrap: wrap;
+            }
+
+            .menu-button {
+                display: block;
+                margin-left: auto;
+            }
+
+            nav {
+                display: none;
+                width: 100%;
+            }
+
+            nav.active {
+                display: block;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+                padding-top: 15px;
+            }
+
+            .header-actions {
+                margin-left: auto;
+            }
+
+            .header-actions a:not(.cart-link) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            main {
+                padding: 35px 15px 60px;
+            }
+
+            .page-title h2 {
+                font-size: 30px;
+            }
+
+            .cart-product {
+                grid-template-columns: 100px 1fr;
+                gap: 15px;
+                padding: 18px;
+            }
+
+            .cart-product img {
+                width: 100px;
+                height: 130px;
+            }
+
+            .product-info h3 {
+                font-size: 16px;
+            }
+
+            .coupon-form {
+                flex-direction: column;
+            }
+
+            .coupon-form button {
+                width: 100%;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toast {
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         CABEÇALHO
+    ========================== -->
+
+    <header>
+
+        <h1><a href="{% url 'home' %}">Fashion Store</a></h1>
+
+        <button
+            class="menu-button"
+            id="menu-button"
+            type="button"
+        >
+            ☰
+        </button>
+
+        <nav id="navigation">
+
+            <ul>
+
+                <li>
+                    <a href="{% url 'home' %}">
+                        Início
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        Masculino
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        Feminino
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        Calçados
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        Acessórios
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        Promoções
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+        <div class="header-actions">
+
+            <a href="#" id="search-button">
+                🔍 Buscar
+            </a>
+
+            <a href="#">
+                👤 Minha conta
+            </a>
+
+            <a
+                href="{% url 'carrinho' %}"
+                class="cart-link"
+            >
+                🛒 Carrinho
+
+                <span
+                    class="cart-count"
+                    id="cart-count"
+                >
+                    0
+                </span>
+
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <!-- =========================
+             TÍTULO
+        ========================== -->
+
+        <div class="page-title">
+
+            <h2>Meu Carrinho</h2>
+
+            <p>
+                Confira os produtos que você adicionou
+                ao seu carrinho.
+            </p>
+
+        </div>
+
+
+        <!-- =========================
+             LAYOUT
+        ========================== -->
+
+        <div class="cart-layout">
+
+            <!-- =========================
+                 PRODUTOS
+            ========================== -->
+
+            <section class="cart-products" id="cart-products">
+
+                {% if cart_items %}
+
+                    {% for item in cart_items %}
+
+                        <article
+                            class="cart-product"
+                            data-price="{{ item.product.price }}"
+                        >
+
+                            <img
+                                src="{{ item.product.image.url }}"
+                                alt="{{ item.product.name }}"
+                            >
+
+                            <div class="product-info">
+
+                                <h3>
+                                    {{ item.product.name }}
+                                </h3>
+
+                                <p>
+                                    Tamanho: {{ item.size }}
+                                </p>
+
+                                <p>
+                                    Cor: {{ item.color }}
+                                </p>
+
+                                <p class="product-price">
+                                    Preço: {{ item.product.price }}
+                                </p>
+
+                                <div class="quantity-area">
+
+                                    <label>
+                                        Quantidade:
+                                    </label>
+
+                                    <div class="quantity-controls">
+
+                                        <button
+                                            class="quantity-minus"
+                                            type="button"
+                                        >
+                                            −
+                                        </button>
+
+                                        <input
+                                            class="quantity"
+                                            type="number"
+                                            value="{{ item.quantity }}"
+                                            min="1"
+                                        >
+
+                                        <button
+                                            class="quantity-plus"
+                                            type="button"
+                                        >
+                                            +
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                                <p class="product-total">
+                                    Total: R$ 0,00
+                                </p>
+
+                                <button
+                                    class="remove-button"
+                                    type="button"
+                                >
+                                    Remover produto
+                                </button>
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-cart">
+
+                        <div class="empty-cart-icon">
+                            🛒
+                        </div>
+
+                        <h2>
+                            Seu carrinho está vazio
+                        </h2>
+
+                        <p>
+                            Você ainda não adicionou nenhum produto.
+                        </p>
+
+                        <a href="{% url 'home' %}">
+                            Começar a comprar
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+            <!-- =========================
+                 RESUMO
+            ========================== -->
+
+            
+            <aside class="summary">
+
+                <h2>
+                    Resumo da compra
+                </h2>
+
+                <div class="summary-line">
+
+                    <span>
+                        Subtotal:
+                    </span>
+
+                    <strong id="subtotal">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+                <div class="summary-line">
+
+                    <span>
+                        Frete:
+                    </span>
+
+                    <strong id="shipping">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+                <hr>
+
+                <div class="summary-total">
+
+                    <span>
+                        Total:
+                    </span>
+
+                    <strong id="grand-total">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+                <button
+                    class="checkout-button"
+                    id="checkout-button"
+                    type="button"
+                >
+                    Finalizar compra
+                </button>
+
+                <a
+                    href="{% url 'home' %}"
+                    class="continue-shopping"
+                >
+                    ← Continuar comprando
+                </a>
+
+            </aside>
+
+
+
+        </div>
+
+
+        <!-- =========================
+             CUPOM
+        ========================== -->
+
+        <section class="coupon">
+
+            <h2>
+                Tem um cupom?
+            </h2>
+
+            <form
+                class="coupon-form"
+                id="coupon-form"
+            >
+
+                <input
+                    type="text"
+                    id="coupon"
+                    placeholder="Digite seu cupom"
+                    autocomplete="off"
+                >
+
+                <button type="submit">
+                    Aplicar cupom
+                </button>
+
+            </form>
+
+            <p
+                class="coupon-message"
+                id="coupon-message"
+            ></p>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <div class="footer-grid">
+
+            <div>
+
+                <h2>
+                    Fashion Store
+                </h2>
+
+                <p>
+                    Moda para todos os estilos.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    Institucional
+                </h3>
+
+                <ul>
+
+                    <li>
+                        <a href="#">
+                            Sobre nós
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            Contato
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            Política de privacidade
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            Termos de uso
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    Atendimento
+                </h3>
+
+                <p>
+                    Segunda a sexta: 08h às 18h
+                </p>
+
+                <p>
+                    Email: contato@fashionstore.com
+                </p>
+
+                <p>
+                    Telefone: (11) 99999-9999
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    Siga-nos
+                </h3>
+
+                <div class="social">
+
+                    <a href="#">
+                        Instagram
+                    </a>
+
+                    <a href="#">
+                        Facebook
+                    </a>
+
+                    <a href="#">
+                        TikTok
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="copyright">
+
+            <p>
+                &copy; 2026 Fashion Store.
+                Todos os direitos reservados.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- NOTIFICAÇÃO -->
+
+    <div
+        class="toast"
+        id="toast"
+    >
+        Carrinho atualizado!
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        // ==========================================
+        // ELEMENTOS
+        // ==========================================
+
+        const cartProducts =
+            document.getElementById("cart-products");
+
+        const subtotalElement =
+            document.getElementById("subtotal");
+
+        const shippingElement =
+            document.getElementById("shipping");
+
+        const grandTotalElement =
+            document.getElementById("grand-total");
+
+        const cartCountElement =
+            document.getElementById("cart-count");
+
+        const toast =
+            document.getElementById("toast");
+
+
+        // ==========================================
+        // VARIÁVEIS
+        // ==========================================
+
+        const SHIPPING_PRICE = 20;
+
+        let discount = 0;
+
+
+        // ==========================================
+        // FORMATAÇÃO DE MOEDA
+        // ==========================================
+
+        function formatMoney(value) {
+
+            return value.toLocaleString(
+                "pt-BR",
+                {
+                    style: "currency",
+                    currency: "BRL"
+                }
+            );
+
+        }
+
+
+        // ==========================================
+        // NOTIFICAÇÃO
+        // ==========================================
+
+        function showToast(message) {
+
+            toast.textContent = message;
+
+            toast.classList.add("show");
+
+            setTimeout(function() {
+
+                toast.classList.remove("show");
+
+            }, 2200);
+
+        }
+
+
+        // ==========================================
+        // ATUALIZAR CARRINHO
+        // ==========================================
+
+        function updateCart() {
+
+            const products =
+                document.querySelectorAll(
+                    ".cart-product"
+                );
+
+            let subtotal = 0;
+
+            let totalItems = 0;
+
+
+            products.forEach(function(product) {
+
+                const price =
+                    Number(
+                        product.dataset.price
+                    );
+
+                const quantity =
+                    Number(
+                        product.querySelector(
+                            ".quantity"
+                        ).value
+                    );
+
+                const total =
+                    price * quantity;
+
+
+                const totalElement =
+                    product.querySelector(
+                        ".product-total"
+                    );
+
+                totalElement.textContent =
+                    "Total: " +
+                    formatMoney(total);
+
+
+                subtotal += total;
+
+                totalItems += quantity;
+
+            });
+
+
+            // Frete grátis acima de R$ 300
+
+            let shipping = SHIPPING_PRICE;
+
+            if (subtotal >= 300) {
+
+                shipping = 0;
+
+            }
+
+
+            // Aplica desconto
+
+            const discountedSubtotal =
+                Math.max(
+                    subtotal - discount,
+                    0
+                );
+
+
+            const grandTotal =
+                discountedSubtotal +
+                shipping;
+
+
+            subtotalElement.textContent =
+                formatMoney(discountedSubtotal);
+
+            shippingElement.textContent =
+                shipping === 0
+                    ? "Grátis"
+                    : formatMoney(shipping);
+
+            grandTotalElement.textContent =
+                formatMoney(grandTotal);
+
+            cartCountElement.textContent =
+                totalItems;
+
+
+            saveCart();
+
+        }
+
+
+        // ==========================================
+        // AUMENTAR QUANTIDADE
+        // ==========================================
+
+        document.addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target.classList.contains(
+                        "quantity-plus"
+                    )
+                ) {
+
+                    const product =
+                        event.target.closest(
+                            ".cart-product"
+                        );
+
+                    const input =
+                        product.querySelector(
+                            ".quantity"
+                        );
+
+                    input.value =
+                        Number(input.value) + 1;
+
+                    updateCart();
+
+                    showToast(
+                        "Quantidade atualizada!"
+                    );
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // DIMINUIR QUANTIDADE
+        // ==========================================
+
+        document.addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target.classList.contains(
+                        "quantity-minus"
+                    )
+                ) {
+
+                    const product =
+                        event.target.closest(
+                            ".cart-product"
+                        );
+
+                    const input =
+                        product.querySelector(
+                            ".quantity"
+                        );
+
+                    const current =
+                        Number(input.value);
+
+
+                    if (current > 1) {
+
+                        input.value =
+                            current - 1;
+
+                        updateCart();
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // ALTERAÇÃO MANUAL DA QUANTIDADE
+        // ==========================================
+
+        document.addEventListener(
+            "change",
+            function(event) {
+
+                if (
+                    event.target.classList.contains(
+                        "quantity"
+                    )
+                ) {
+
+                    if (
+                        Number(event.target.value) < 1
+                    ) {
+
+                        event.target.value = 1;
+
+                    }
+
+                    updateCart();
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // REMOVER PRODUTO
+        // ==========================================
+
+        document.addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target.classList.contains(
+                        "remove-button"
+                    )
+                ) {
+
+                    const product =
+                        event.target.closest(
+                            ".cart-product"
+                        );
+
+                    product.remove();
+
+
+                    // Remove o divisor relacionado
+
+                    const nextElement =
+                        product.nextElementSibling;
+
+                    if (
+                        nextElement &&
+                        nextElement.classList.contains(
+                            "divider"
+                        )
+                    ) {
+
+                        nextElement.remove();
+
+                    }
+
+
+                    updateCart();
+
+                    showToast(
+                        "Produto removido do carrinho."
+                    );
+
+
+                    checkEmptyCart();
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // VERIFICAR CARRINHO VAZIO
+        // ==========================================
+
+        function checkEmptyCart() {
+
+            const products =
+                document.querySelectorAll(
+                    ".cart-product"
+                );
+
+
+            if (products.length === 0) {
+
+                cartProducts.innerHTML = `
+
+                    <div class="empty-cart">
+
+                        <div class="empty-cart-icon">
+                            🛒
+                        </div>
+
+                        <h2>
+                            Seu carrinho está vazio
+                        </h2>
+
+                        <p>
+                            Você ainda não adicionou
+                            nenhum produto.
+                        </p>
+
+                        <a href="index.html">
+                            Começar a comprar
+                        </a>
+
+                    </div>
+
+                `;
+
+                subtotalElement.textContent =
+                    formatMoney(0);
+
+                shippingElement.textContent =
+                    formatMoney(0);
+
+                grandTotalElement.textContent =
+                    formatMoney(0);
+
+                cartCountElement.textContent = 0;
+
+            }
+
+        }
+
+
+        // ==========================================
+        // CUPOM
+        // ==========================================
+
+        const couponForm =
+            document.getElementById(
+                "coupon-form"
+            );
+
+        const couponInput =
+            document.getElementById(
+                "coupon"
+            );
+
+        const couponMessage =
+            document.getElementById(
+                "coupon-message"
+            );
+
+
+        couponForm.addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+
+                const coupon =
+                    couponInput.value
+                    .trim()
+                    .toUpperCase();
+
+
+                // Exemplo de cupom
+
+                if (coupon === "FASHION10") {
+
+                    discount = 20;
+
+                    couponMessage.textContent =
+                        "Cupom aplicado! Você ganhou R$ 20,00 de desconto.";
+
+                    couponMessage.className =
+                        "coupon-message success";
+
+                    updateCart();
+
+                }
+
+                else if (coupon === "") {
+
+                    discount = 0;
+
+                    couponMessage.textContent =
+                        "Digite um código de cupom.";
+
+                    couponMessage.className =
+                        "coupon-message error";
+
+                }
+
+                else {
+
+                    discount = 0;
+
+                    couponMessage.textContent =
+                        "Cupom inválido.";
+
+                    couponMessage.className =
+                        "coupon-message error";
+
+                    updateCart();
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // FINALIZAR COMPRA
+        // ==========================================
+
+        const checkoutButton =
+            document.getElementById(
+                "checkout-button"
+            );
+
+
+        checkoutButton.addEventListener(
+            "click",
+            function() {
+
+                const products =
+                    document.querySelectorAll(
+                        ".cart-product"
+                    );
+
+
+                if (products.length === 0) {
+
+                    alert(
+                        "Seu carrinho está vazio."
+                    );
+
+                    return;
+
+                }
+
+
+                const total =
+                    grandTotalElement.textContent;
+
+
+                const confirmation =
+                    confirm(
+                        "Deseja finalizar sua compra no valor de " +
+                        total +
+                        "?"
+                    );
+
+
+                if (confirmation) {
+
+                    showToast(
+                        "Compra iniciada!"
+                    );
+
+                    // Aqui futuramente você pode
+                    // redirecionar para checkout.html
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // MENU MOBILE
+        // ==========================================
+
+        const menuButton =
+            document.getElementById(
+                "menu-button"
+            );
+
+        const navigation =
+            document.getElementById(
+                "navigation"
+            );
+
+
+        menuButton.addEventListener(
+            "click",
+            function() {
+
+                navigation.classList.toggle(
+                    "active"
+                );
+
+            }
+        );
+
+
+        // ==========================================
+        // BUSCA
+        // ==========================================
+
+        const searchButton =
+            document.getElementById(
+                "search-button"
+            );
+
+
+        searchButton.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                const search =
+                    prompt(
+                        "O que você está procurando?"
+                    );
+
+
+                if (
+                    search &&
+                    search.trim() !== ""
+                ) {
+
+                    showToast(
+                        "Buscando por: " +
+                        search
+                    );
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // LOCAL STORAGE
+        // ==========================================
+
+        function saveCart() {
+
+            const products =
+                document.querySelectorAll(
+                    ".cart-product"
+                );
+
+            const cartData = [];
+
+
+            products.forEach(function(product) {
+
+                cartData.push({
+
+                    name:
+                        product.querySelector(
+                            "h3"
+                        ).textContent,
+
+                    price:
+                        Number(
+                            product.dataset.price
+                        ),
+
+                    quantity:
+                        Number(
+                            product.querySelector(
+                                ".quantity"
+                            ).value
+                        )
+
+                });
+
+            });
+
+
+            localStorage.setItem(
+                "fashionCartProducts",
+                JSON.stringify(cartData)
+            );
+
+        }
+
+
+        // ==========================================
+        // INICIALIZAÇÃO
+        // ==========================================
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+        const products = document.querySelectorAll(".cart-product");
+
+        if (products.length === 0) {
+
+            subtotalElement.textContent = formatMoney(0);
+            shippingElement.textContent = formatMoney(0);
+            grandTotalElement.textContent = formatMoney(0);
+            cartCountElement.textContent = "0";
+
+        } else {
+
+            updateCart();
+
+        }
+
+        });
+
+    </script>
+
+</body>
+</html>
