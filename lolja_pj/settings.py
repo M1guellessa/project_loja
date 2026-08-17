@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'lolja_app',
     'carrinho_app',
+    'login',
+    'cadastro',
+    'painel',
+    'produto_painel',
 ]
 
 MIDDLEWARE = [

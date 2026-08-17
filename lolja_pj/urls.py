@@ -18,10 +18,20 @@ from django.contrib import admin
 from django.urls import path
 from lolja_app import views as lolja_views
 from carrinho_app import views as carrinho_views
+from login import views as login_views
+from cadastro import views as cadastro_views
+from painel import views as painel_views
+from produto_painel import views as produto_painel_views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', lolja_views.home, name='home'),
     path('', lolja_views.home, name='home'),
     path('carrinho/', carrinho_views.carrinho, name='carrinho'),
+    path('login/', login_views.login_views, name='login'),
+    path('logout/', login_views.logout_view, name='logout'),
+    path('painel/', painel_views.painel, name='painel'),
+    path('cadastro/', cadastro_views.cadastro, name='cadastro'),
+    path('produto_painel/', produto_painel_views.produto_painel, name='produto_painel'),
 ]
