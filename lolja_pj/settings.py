@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'login',
     'cadastro',
     'painel',
-    'produto_painel',
 ]
 
 MIDDLEWARE = [

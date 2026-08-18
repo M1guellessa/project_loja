@@ -1,10 +1,389 @@
-<h1>PAINEL PRINCIPAL - RESTRITO</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<h1>Bem-vindo ao Painel!</h1>
-<p>Olá, {{ request.user.username }}!</p>
+    <title>Painel Principal</title>
 
-<!-- Botão de Logout -->
-<form action="{% url 'logout' %}" method="POST">
-    {% csrf_token %}
-    <button type="submit">Sair da Conta</button>
-</form>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f9;
+            color: #1f2937;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #111827, #1f2937);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .header p {
+            color: #cbd5e1;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .welcome h2 {
+            font-size: 26px;
+            margin-bottom: 8px;
+            color: #111827;
+        }
+
+        .welcome p {
+            color: #6b7280;
+        }
+
+        /* TÍTULO */
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .products-header h2 {
+            font-size: 24px;
+            color: #111827;
+        }
+
+        .product-count {
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* GRID */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        /* CARD */
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+            transition: 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+            display: block;
+            background: #e5e7eb;
+        }
+
+        .no-image {
+            height: 210px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #e5e7eb;
+            color: #9ca3af;
+            font-size: 15px;
+        }
+
+        .product-content {
+            padding: 20px;
+        }
+
+        .product-content h3 {
+            font-size: 19px;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 42px;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 23px;
+            font-weight: bold;
+            color: #16a34a;
+            margin-bottom: 15px;
+        }
+
+        /* ESTOQUE */
+        .stock {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .stock.available {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .stock.low {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .stock.empty {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        /* SEM PRODUTOS */
+        .empty {
+            background: white;
+            padding: 60px 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: #6b7280;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 18px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .logout-form {
+                width: 100%;
+            }
+
+            .logout-btn {
+                width: 100%;
+            }
+
+            .container {
+                margin-top: 25px;
+            }
+
+            .products-header {
+                align-items: flex-start;
+                gap: 10px;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div>
+            <h1>📦 Painel Principal</h1>
+            <p>Área administrativa restrita</p>
+        </div>
+
+        <form action="{% url 'logout' %}" method="POST" class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">
+                Sair da Conta
+            </button>
+        </form>
+
+    </header>
+
+
+    <!-- CONTEÚDO -->
+    <main class="container">
+
+        <!-- BOAS-VINDAS -->
+        <section class="welcome">
+            <h2>Olá, {{ request.user.username }}! 👋</h2>
+            <p>Bem-vindo ao seu painel. Confira os produtos cadastrados abaixo.</p>
+        </section>
+
+
+        <!-- PRODUTOS -->
+        <div class="products-header">
+
+            <h2>Produtos</h2>
+
+            <span class="product-count">
+                {{ produtos|length }} produto{{ produtos|length|pluralize }}
+            </span>
+
+        </div>
+
+
+        {% if produtos %}
+
+            <div class="products-grid">
+
+                {% for produto in produtos %}
+
+                    <article class="product-card">
+
+                        <!-- IMAGEM -->
+                        {% if produto.imagem %}
+
+                            <img
+                                src="{{ produto.imagem.url }}"
+                                alt="{{ produto.nome }}"
+                                class="product-image"
+                            >
+
+                        {% else %}
+
+                            <div class="no-image">
+                                Sem imagem
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- INFORMAÇÕES -->
+                        <div class="product-content">
+
+                            <h3>
+                                {{ produto.nome }}
+                            </h3>
+
+                            <p class="description">
+                                {{ produto.descricao }}
+                            </p>
+
+                            <div class="price">
+                                R$ {{ produto.preco }}
+                            </div>
+
+
+                            <!-- ESTOQUE -->
+                            {% if produto.estoque == 0 %}
+
+                                <span class="stock empty">
+                                    ❌ Sem estoque
+                                </span>
+
+                            {% elif produto.estoque <= 5 %}
+
+                                <span class="stock low">
+                                    ⚠️ Últimas unidades: {{ produto.estoque }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="stock available">
+                                    ✓ {{ produto.estoque }} unidades disponíveis
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    📦
+                </div>
+
+                <h3>Nenhum produto cadastrado</h3>
+
+                <p>
+                    Ainda não existem produtos disponíveis no sistema.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer>
+        Painel Administrativo © 2026
+    </footer>
+
+</body>
+</html>
