@@ -263,6 +263,13 @@
             </button>
         </form>
 
+        <form action="{% url 'cadastro_produto' %}" method="POST" class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">
+                Cadastrar Produto
+            </button>
+        </form>
+
     </header>
 
 

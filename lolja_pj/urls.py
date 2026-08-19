@@ -32,4 +32,5 @@ urlpatterns = [
     path('logout/', login_views.logout_view, name='logout'),
     path('cadastro/', cadastro_views.cadastro, name='cadastro'),
     path('painel/', painel_views.painel, name='painel'),
+    path('cadastro_produto/', painel_views.cadastro_produto, name='cadastro_produto')
 ]
